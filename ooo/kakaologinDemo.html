@@ -1,0 +1,53 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+<script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
+<a id="custom-login-btn" href=" ">
+  <img
+    src="//k.kakaocdn.net/14/dn/btqCn0WEmI3/nijroPfbpCa4at5EIsjyf0/o.jpg"
+    width="222"
+  />
+</a >
+<p id="token-result"></p >
+<script type="text/javascript">
+  var restApi = "b64eca81ffff773c0109f3fbb727c920";
+  var javascriptApi = "2e8dbd573cb16a0af61768cfea441174";
+  var redirect_uri="http://xlz.teachee-dev.com";//获取Facebook用户信息后回调地址,客户服务器的链接（此处为示例）
+
+  // 初始化应用程序密钥
+  Kakao.init(javascriptApi);
+  function loginWithKakao() {
+    Kakao.Auth.authorize({
+      redirectUri: redirect_uri,
+    })
+  }
+  // This is the sample UI code for demonstration.
+  displayToken()
+  function displayToken() {
+    const token = getCookie('authorize-access-token')
+    if(token) {
+      Kakao.Auth.setAccessToken(token)
+      Kakao.Auth.getStatusInfo(({ status }) => {
+        if(status === 'connected') {
+          document.getElementById('token-result').innerText = 'login success. token: ' + Kakao.Auth.getAccessToken()
+        } else {
+          Kakao.Auth.setAccessToken(null)
+        }
+      })
+    }
+  }
+  function getCookie(name) {
+    const value = "; " + document.cookie;
+    const parts = value.split("; " + name + "=");
+    if (parts.length === 2) return parts.pop().split(";").shift();
+  }
+</script>
+
+</body>
+</html>
